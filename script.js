@@ -1,36 +1,38 @@
-//your code here
 const itemInput = document.getElementById("item");
-const addBtn = document.getElementById("addBtn");
-const cartList = document.getElementById("cartList");
+const priceInput = document.getElementById("price");
+const addBtn = document.querySelector('input[type="button"]');
+const cart = document.getElementById("cart");
 
-// Load cart from localStorage or initialize empty array
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// Load saved cart
+let items = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Display items
 function renderCart() {
-    cartList.innerHTML = "";
+    cart.innerHTML = "";
 
-    cart.forEach((item) => {
+    items.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = item;
-        cartList.appendChild(li);
+        li.textContent = `${item.name} - Rs.${item.price}`;
+        cart.appendChild(li);
     });
 }
 
-// Add item to cart
 addBtn.addEventListener("click", () => {
-    const item = itemInput.value.trim();
+    const name = itemInput.value.trim();
+    const price = priceInput.value.trim();
 
-    if (item) {
-        cart.push(item);
+    if (!name || !price) return;
 
-        // Save to localStorage
-        localStorage.setItem("cart", JSON.stringify(cart));
+    items = [{
+        name,
+        price
+    }];
 
-        renderCart();
-        itemInput.value = "";
-    }
+    localStorage.setItem("cart", JSON.stringify(items));
+
+    renderCart();
+
+    itemInput.value = "";
+    priceInput.value = "";
 });
 
-// Initial render when page loads
 renderCart();
